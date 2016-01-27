@@ -80,6 +80,9 @@ INSTALLED_APPS = [
     # 'django.contrib.sites',
 
     'djangobower',
+    'frontend',
+    'django_dbdump',
+    'django_congen',
 ]
 
 
