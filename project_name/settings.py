@@ -16,6 +16,7 @@ PROJECT_PATH = ROOT_PATH
 PROJECT_NAME = os.path.basename(ROOT_PATH)
 PROJECT_DATA_DIR = os.path.join(BASE_DIR, PROJECT_NAME, 'data')
 __TEMPLATE_DIR = os.path.join(BASE_DIR, PROJECT_NAME, 'templates')
+__LOCALE_PATH = os.path.abspath(os.path.join(ROOT_PATH, 'locale'))
 
 VIRTUAL_ENV_DIR = os.path.abspath(os.path.join(BASE_DIR, os.path.pardir))
 LOGGING_DIR = os.path.join(VIRTUAL_ENV_DIR, 'log')
@@ -32,7 +33,9 @@ SECRET_SETTINGS_FILE = os.path.join(BASE_DIR, PROJECT_NAME, 'secret_settings.py'
 
 
 # ------
-for path in [LOGGING_DIR, STATIC_ROOT, MEDIA_ROOT, BOWER_COMPONENTS_ROOT, PROJECT_DATA_DIR, __TEMPLATE_DIR]:
+for path in [
+    LOGGING_DIR, STATIC_ROOT, MEDIA_ROOT, BOWER_COMPONENTS_ROOT, PROJECT_DATA_DIR, __TEMPLATE_DIR, __LOCALE_PATH
+]:
     if not os.path.exists(path):
         os.makedirs(path, mode=0o755, exist_ok=True)
 
@@ -214,6 +217,7 @@ AUTH_PASSWORD_VALIDATORS = [
 ]
 
 
+LOCALE_PATHS = (__LOCALE_PATH,)
 LANGUAGE_CODE = 'ru'
 LANGUAGES = (
     ('en', gettext('en')),
@@ -240,6 +244,8 @@ CSP_REPORT_URI = reverse_lazy('report_csp')
 CSP_REPORTS_LOGGER_NAME = 'raven'
 CSP_REPORTS_EMAIL_ADMINS = True
 
+#django-rosetta
+ROSETTA_ENABLE_TRANSLATION_SUGGESTIONS = True
 
 # REDEFINE
 from .local_settings import *
