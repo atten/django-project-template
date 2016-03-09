@@ -3,6 +3,7 @@ import socket
 import os
 
 from django.core.urlresolvers import reverse_lazy
+from django.utils.translation import ugettext_lazy as _
 
 gettext = lambda s: s
 
@@ -220,8 +221,8 @@ AUTH_PASSWORD_VALIDATORS = [
 LOCALE_PATHS = (__LOCALE_PATH,)
 LANGUAGE_CODE = 'ru'
 LANGUAGES = (
-    ('en', gettext('en')),
-    ('ru', gettext('ru')),
+    ('en', _('en')),
+    ('ru', _('ru')),
 )
 
 TIME_ZONE = 'UTC'
