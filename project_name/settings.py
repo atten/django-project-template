@@ -55,7 +55,7 @@ if not os.path.exists(LOCAL_SETTINGS_FILE):
         f.write('# -*- coding: utf-8 -*-\n')
         f.close()
 
-from .secret_settings import *
+from .secret_settings import *  # noqa
 
 # HOSTS
 HOSTNAME = socket.gethostname()
@@ -245,8 +245,8 @@ CSP_REPORT_URI = reverse_lazy('report_csp')
 CSP_REPORTS_LOGGER_NAME = 'raven'
 CSP_REPORTS_EMAIL_ADMINS = True
 
-#django-rosetta
+# django-rosetta
 ROSETTA_ENABLE_TRANSLATION_SUGGESTIONS = True
 
 # REDEFINE
-from .local_settings import *
+from .local_settings import *  # noqa
