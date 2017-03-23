@@ -1,0 +1,8 @@
+django
+django-bower
+django-redis-cache
+gunicorn
+psycopg2
+python-memcached
+pexpect
+pytz

@@ -1,32 +1,22 @@
-# -*- coding: utf-8 -*-
-import socket
-import os
+import os.path
 
-from django.core.urlresolvers import reverse_lazy
-from django.utils.translation import ugettext_lazy as _
-
-gettext = lambda s: s
-
-DEBUG = True
-
+DEBUG = False
 
 # PATHS
-BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-ROOT_PATH = BASE_DIR
-PROJECT_PATH = ROOT_PATH
-PROJECT_NAME = os.path.basename(ROOT_PATH)
+BASE_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
+PROJECT_NAME = os.path.basename(BASE_DIR)
+PROJECT_PATH = os.path.abspath(os.path.dirname(__file__))
 PROJECT_DATA_DIR = os.path.join(BASE_DIR, PROJECT_NAME, 'data')
-__TEMPLATE_DIR = os.path.join(BASE_DIR, PROJECT_NAME, 'templates')
-__LOCALE_PATH = os.path.abspath(os.path.join(ROOT_PATH, 'locale'))
-
+TEMP_DIR = os.path.join('/tmp', PROJECT_NAME)
+FILE_UPLOAD_TEMP_DIR = TEMP_DIR     # for TemporaryUploadedFile
+__TEMPLATE_DIR = os.path.join(PROJECT_PATH, 'templates')
+__LOCALE_PATH = os.path.abspath(os.path.join(BASE_DIR, 'locale'))
 VIRTUAL_ENV_DIR = os.path.abspath(os.path.join(BASE_DIR, os.path.pardir))
 LOGGING_DIR = os.path.join(VIRTUAL_ENV_DIR, 'log')
-
-STATIC_ROOT = os.path.join(ROOT_PATH, 'static')
+STATIC_ROOT = os.path.join(PROJECT_PATH, 'static')
 STATIC_URL = '/static/'
-MEDIA_ROOT = os.path.join(ROOT_PATH, 'media')
+MEDIA_ROOT = os.path.join(PROJECT_PATH, 'media')
 MEDIA_URL = '/media/'
-
 BOWER_COMPONENTS_ROOT = os.path.join(BASE_DIR, 'frontend/static/frontend')
 
 LOCAL_SETTINGS_FILE = os.path.join(BASE_DIR, PROJECT_NAME, 'local_settings.py')
@@ -34,9 +24,9 @@ SECRET_SETTINGS_FILE = os.path.join(BASE_DIR, PROJECT_NAME, 'secret_settings.py'
 
 
 # ------
-for path in [
+for path in (
     LOGGING_DIR, STATIC_ROOT, MEDIA_ROOT, BOWER_COMPONENTS_ROOT, PROJECT_DATA_DIR, __TEMPLATE_DIR, __LOCALE_PATH
-]:
+):
     if not os.path.exists(path):
         os.makedirs(path, mode=0o755, exist_ok=True)
 
@@ -46,8 +36,6 @@ if not os.path.exists(SECRET_SETTINGS_FILE):
         chars = 'abcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*(-_=+)'
         f.write('# -*- coding: utf-8 -*-\n')
         f.write("SECRET_KEY = '%s'\n" % get_random_string(50, chars))
-        f.write("DB_PASSWORD = '%s'\n" % get_random_string(50))
-        f.write("EMAIL_HOST_PASSWORD = '%s'\n" % get_random_string(50))
         f.close()
 
 if not os.path.exists(LOCAL_SETTINGS_FILE):
@@ -55,35 +43,27 @@ if not os.path.exists(LOCAL_SETTINGS_FILE):
         f.write('# -*- coding: utf-8 -*-\n')
         f.close()
 
+REDIS_PORT = 6379
+
+
 from .secret_settings import *  # noqa
 
-# HOSTS
-HOSTNAME = socket.gethostname()
-RELEASE_HOSTS = [
-    'hatebase',
-    # 'haterelay',
-]
 
 ALLOWED_HOSTS = [
-    HOSTNAME,
     '127.0.0.1',
 ]
 
-if HOSTNAME in RELEASE_HOSTS:
-    DEBUG = False
-
-
 INSTALLED_APPS = [
-    'django.contrib.admin',
-    'django.contrib.auth',
     'django.contrib.contenttypes',
+    'django.contrib.auth',
     'django.contrib.sessions',
-    'django.contrib.messages',
+    # 'django.contrib.messages',
     'django.contrib.staticfiles',
-
+    'django.contrib.admin',
     # 'django.contrib.sites',
 
     'djangobower',
+
     'frontend',
     'django_dbdump',
     'django_congen',
@@ -92,20 +72,15 @@ INSTALLED_APPS = [
 
 BOWER_INSTALLED_APPS = (
     'jquery',
-    'materialize',
-    'select2',
-    'js-cookie',
 )
 
 
 JQUERY_URL = '/static/frontend/bower_components/jquery/dist/jquery.min.js'
 
 
-MIDDLEWARE_CLASSES = [
+MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
-
     # 'htmlmin.middleware.HtmlMinifyMiddleware',
-
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -113,10 +88,10 @@ MIDDLEWARE_CLASSES = [
     'django.contrib.auth.middleware.SessionAuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-
     # 'csp.middleware.CSPMiddleware',
     # 'htmlmin.middleware.MarkRequestMiddleware',
 ]
+
 
 STATICFILES_FINDERS = (
     'django.contrib.staticfiles.finders.FileSystemFinder',
@@ -131,7 +106,7 @@ TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
         'DIRS': [__TEMPLATE_DIR],
-        #'APP_DIRS': True,
+        # 'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
                 'django.contrib.auth.context_processors.auth',
@@ -160,10 +135,10 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
         'NAME': '{{ project_name }}',
-        'USER': '{{ project_name }}',
-        'PASSWORD': DB_PASSWORD,
-        'HOST': 'localhost',
-        'PORT': ''
+        'USER': '',
+        'HOST': '',
+        'PORT': '',
+        'CONN_MAX_AGE': 60
     }
 }
 
@@ -179,7 +154,7 @@ CACHES = {
         'KEY_PREFIX': '{{ project_name }}',
         'BACKEND': 'redis_cache.RedisCache',
         'LOCATION': [
-            'localhost:6379',
+            'localhost:%d' % REDIS_PORT,
         ],
         'OPTIONS': {
             'DB': 8,
@@ -196,10 +171,8 @@ CACHES = {
 }
 
 SESSION_ENGINE = 'django.contrib.sessions.backends.cache'
-# SESSION_SAVE_EVERY_REQUEST
-
-# if HOSTNAME in RELEASE_HOSTS:
-#     CACHES['persistent']['OPTIONS']['PASSWORD'] = '111'
+SESSION_SERIALIZER = 'django.contrib.sessions.serializers.JSONSerializer'
+# SESSION_CACHE_ALIAS = 'default'
 
 
 AUTH_PASSWORD_VALIDATORS = [
@@ -217,36 +190,20 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-
-LOCALE_PATHS = (__LOCALE_PATH,)
-LANGUAGE_CODE = 'ru'
-LANGUAGES = (
-    ('en', _('en')),
-    ('ru', _('ru')),
-)
-
-TIME_ZONE = 'UTC'
+TIME_ZONE = 'Europe/Moscow'
 USE_I18N = True
 USE_L10N = True
 USE_TZ = True
+LOCALE_PATHS = (__LOCALE_PATH,)
+LANGUAGES = (
+    ('en', 'English'),
+    ('ru', 'Russian'),
+)
+
 
 # BATTERIES
 # =========
 
-# django cspreports
-CSP_DEFAULT_SRC = ("'none'",)
-CSP_STYLE_SRC = ("'self'", 'fonts.googleapis.com', "'unsafe-inline'")
-CSP_SCRIPT_SRC = ("'self'", '*.yandex.ru', '*.google.com', "'unsafe-inline'", "'unsafe-eval'")
-CSP_FONT_SRC = ("'self'", '*.gstatic.com')
-CSP_IMG_SRC = ("'self'", '*.yandex.ru', '*.paypal.com', '*.gstatic.com')
-CSP_FRAME_SRC = ("*.youtube.com", "*.google.com")
-CSP_CONNECT_SRC = ('*.yandex.ru', "'self'")
-CSP_REPORT_URI = reverse_lazy('report_csp')
-CSP_REPORTS_LOGGER_NAME = 'raven'
-CSP_REPORTS_EMAIL_ADMINS = True
-
-# django-rosetta
-ROSETTA_ENABLE_TRANSLATION_SUGGESTIONS = True
 
 # REDEFINE
 from .local_settings import *  # noqa

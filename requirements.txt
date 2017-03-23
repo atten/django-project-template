@@ -1,12 +1,1 @@
-django
-psycopg2
-python-memcached
-django-redis-cache
-requests
-django-bower
-django-csp
-django-htmlmin
-django-model-utils
-django-floppyforms
-django-compressor
-pexpect
+-r requirements/base.txt
