@@ -1,0 +1,14 @@
+.tmp/
+.git/
+.idea/
+docker/
+media/
+static/
+usermedia/
+__pycache__
+
+docker-compose*
+Dockerfile
+*.coffee
+*.pyc
+.env

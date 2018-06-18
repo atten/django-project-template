@@ -4,7 +4,6 @@ __pycache__/
 # Directories
 .idea
 .cache
-frontend/static/frontend/bower_components/*
 {{ project_name }}/media/*
 {{ project_name }}/static/*
 

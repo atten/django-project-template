@@ -1,8 +1,4 @@
 django
-django-bower
 django-redis-cache
-gunicorn
+django-docker-helpers
 psycopg2
-python-memcached
-pexpect
-pytz
