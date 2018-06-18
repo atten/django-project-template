@@ -10,10 +10,9 @@ RUN pip3 install -r requirements/prod.txt --no-cache-dir
 
 ADD . .
 
-RUN mkdir /app/static && \
-    mkdir /app/media && \
-    mkdir /app/usermedia && \
-    mkdir /app/sitemon/settings/local && \
+RUN mkdir /app/{{ project_name }}/static && \
+    mkdir /app/{{ project_name }}/media && \
+    mkdir /app/{{ project_name }}/usermedia && \
     adduser -D -u 1000 appuser -h /app && chown -R appuser: /app
 
 USER appuser

@@ -1,4 +1,6 @@
 import os.path
+import socket
+import warnings
 
 from django_docker_helpers.config import ConfigLoader
 
@@ -11,9 +13,9 @@ PROJECT_NAME = os.path.basename(BASE_DIR)
 PROJECT_PATH = os.path.abspath(os.path.dirname(__file__))
 TEMP_DIR = os.path.join('/tmp', PROJECT_NAME)
 FILE_UPLOAD_TEMP_DIR = TEMP_DIR     # for TemporaryUploadedFile
-MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
-STATIC_ROOT = os.path.join(BASE_DIR, 'static')
-USERMEDIA_ROOT = os.path.join(BASE_DIR, 'usermedia')
+MEDIA_ROOT = os.path.join(PROJECT_PATH, 'media')
+STATIC_ROOT = os.path.join(PROJECT_PATH, 'static')
+USERMEDIA_ROOT = os.path.join(PROJECT_PATH, 'usermedia')
 
 # ------
 for path in (
@@ -179,7 +181,7 @@ USE_I18N = True
 USE_L10N = True
 USE_TZ = True
 LOCALE_PATHS = (
-    os.path.join(BASE_DIR, 'locale')
+    os.path.join(PROJECT_PATH, 'locale'),
 )
 LANGUAGES = (
     ('en', 'English'),
