@@ -1,5 +1,4 @@
 import os.path
-import socket
 import warnings
 
 from django_docker_helpers.config import ConfigLoader
@@ -53,8 +52,7 @@ if SECRET_KEY == 'secret':
 
 
 # --------------- HOSTS ---------------
-HOSTNAME = socket.gethostname()
-ALLOWED_HOSTS = [HOSTNAME] + configure('hosts', [])
+ALLOWED_HOSTS = configure('hosts', [])
 
 
 INSTALLED_APPS = [
@@ -133,12 +131,6 @@ DATABASES = {
 
 CACHES = {
     'default': {
-        'BACKEND': 'django.core.cache.backends.memcached.MemcachedCache',
-        'LOCATION': configure('caches.memcached.location', '127.0.0.1:11211'),
-        'KEY_PREFIX': '{{ project_name }}',
-    },
-
-    'persistent': {
         'KEY_PREFIX': '{{ project_name }}',
         'BACKEND': 'redis_cache.RedisCache',
         'LOCATION': configure('caches.redis.location', ['localhost:6379']),
@@ -158,7 +150,7 @@ CACHES = {
 
 SESSION_ENGINE = 'django.contrib.sessions.backends.cache'
 SESSION_SERIALIZER = 'django.contrib.sessions.serializers.JSONSerializer'
-SESSION_CACHE_ALIAS = 'persistent'
+SESSION_CACHE_ALIAS = 'default'
 
 
 AUTH_PASSWORD_VALIDATORS = [

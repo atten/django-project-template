@@ -1,5 +1,0 @@
-django
-django-redis-cache
-django-docker-helpers
-psycopg2-binary
-python-memcached

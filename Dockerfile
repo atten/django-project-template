@@ -1,12 +1,18 @@
 FROM python:3-alpine
 
-RUN apk update && apk upgrade && apk add --no-cache gcc postgresql-dev git libpq musl-dev linux-headers libffi-dev make
-
 WORKDIR /app
 
-ADD requirements requirements
+# required by psycopg2-binary in runtime
+RUN apk add --no-cache libpq
 
-RUN pip3 install -r requirements/prod.txt --no-cache-dir
+ADD Pipfile Pipfile
+ADD Pipfile.lock Pipfile.lock
+
+RUN apk --no-cache add --virtual build-dependencies gcc postgresql-dev musl-dev linux-headers libffi-dev make && \
+    pip install pipenv --no-cache-dir && \
+    pipenv install --deploy --system && \
+    pip uninstall -y pipenv && \
+    apk del build-dependencies
 
 ADD . .
 

@@ -1,10 +1,12 @@
 .tmp/
 .git/
 .idea/
+.vscode/
 docker/
-media/
-static/
-usermedia/
+{{ project_name }}/config/
+{{ project_name }}/media/
+{{ project_name }}/static/
+{{ project_name }}/usermedia/
 __pycache__
 
 docker-compose*
