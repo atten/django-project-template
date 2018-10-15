@@ -12,7 +12,7 @@ project_name
 ### Template variants:
 
 * [base](https://github.com/atten/django-project-template/tree/master)
-* [base+celery](https://github.com/atten/django-project-template/tree/base+celery)
+* [base+celery](https://github.com/atten/django-project-template/tree/base+celery) [[compare](https://github.com/atten/django-project-template/compare/master...atten:base+celery?expand=1)]
 
 ### Running development server on local machine:
 
