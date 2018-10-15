@@ -23,6 +23,10 @@ project_name
     ```
     python3 -m pip install pip==18.0
     ```
+1.  Launch docker-compose (without django):
+    ```
+    docker-compose -f docker-compose.dev.yml up -d
+    ```
 1.  Run python dev server:
     ```
     ./manage.py runserver 8000
