@@ -9,6 +9,11 @@ django-admin.py startproject --template=https://github.com/atten/django-project-
 project_name
 ```
 
+### Template variants:
+
+* [base](https://github.com/atten/django-project-template/tree/master)
+* [base+celery](https://github.com/atten/django-project-template/tree/base+celery)
+
 ### Running development server on local machine:
 
 1. Check and edit config if necessary
