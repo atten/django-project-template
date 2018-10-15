@@ -9,7 +9,6 @@ services:
     command: "uwsgi --socket 0.0.0.0:8000 --module={{ project_name }}.wsgi:application --processes=4 --threads=2"
     environment:
       PRODUCTION: 0
-      DOCKERIZED: 1
       DJANGO_CONFIG_FILE_NAME: {{ project_name }}-docker.yml
     volumes:
       - "./docker/config/{{ project_name }}-docker.yml:/app/{{ project_name }}/config/{{ project_name }}-docker.yml"
