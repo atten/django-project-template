@@ -25,4 +25,6 @@ RUN mkdir /app/{{ project_name }}/static && \
 
 USER appuser
 
+ENV DOCKERIZED=1
+
 EXPOSE 8000
