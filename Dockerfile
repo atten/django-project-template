@@ -1,4 +1,6 @@
-FROM python:3-alpine
+# celery's not supporting python 3.7 still:
+# https://github.com/celery/celery/issues/4500#issuecomment-364644081
+FROM python:3.6-alpine
 
 WORKDIR /app
 

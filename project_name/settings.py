@@ -193,6 +193,25 @@ REST_FRAMEWORK = {
     'TEST_REQUEST_DEFAULT_FORMAT': 'json'
 }
 
+# CELERY
+BROKER_URL = configure('celery.broker_url', 'redis://localhost:6379/0')
+CELERY_RESULT_BACKEND = configure('celery.result_backend', 'redis://localhost:6379/1')
+CELERY_WORKERS = configure('celery.workers', 1)
+BROKER_TRANSPORT_OPTIONS = {'visibility_timeout': 3600}
+# в Celery 4.0.1 только pickle возвращает оригинальные исключения в AsyncResult.result.
+CELERY_TASK_SERIALIZER = 'pickle'
+# если issue будет закрыта, то pickle необязателен (https://github.com/celery/celery/issues/3586)
+CELERY_RESULT_SERIALIZER = 'pickle'
+CELERY_ACCEPT_CONTENT = ['pickle']
+
+# Removable testing task
+CELERYBEAT_SCHEDULE = {
+    'test-task': {
+        'task': '{{ project_name }}.celery.debug_task',
+        'schedule': 10,
+    },
+}
+
 # RAVEN
 if configure('raven', False):
     INSTALLED_APPS += ['raven.contrib.django.raven_compat']

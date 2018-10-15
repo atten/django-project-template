@@ -28,3 +28,8 @@ caches:
       connection_pool_class_kwargs:
         max_connections: 50
         timeout: 20
+
+celery:
+  broker_url: "redis://localhost:6370/0"
+  result_backend: "redis://localhost:6370/1"
+  workers: 1

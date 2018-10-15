@@ -3,7 +3,7 @@
 Start project:
 
 ```
-django-admin.py startproject --template=https://github.com/atten/django-project-template/zipball/master \
+django-admin.py startproject --template=https://github.com/atten/django-project-template/zipball/base+celery \
 -e py,yml,cfg,sh,conf \
 -n Dockerfile -n .gitignore -n .dockerignore \
 project_name
@@ -31,6 +31,10 @@ project_name
     ```
     ./manage.py runserver 8000
     ```
+1.  Run celery with beat:
+    ```
+    celery worker --app {{ project_name }} -l info -c 1 -B
+    ```
 
     
 ### Running production server in docker:    
@@ -51,5 +55,7 @@ project_name
     ```
     curl -i http://localhost:8000 -H host:{{ project_name }}
     ```
- 
-  
+1. Check celery logs (test task will be invoked every 10s):
+    ```
+    docker-compose logs -f celery
+    ```
