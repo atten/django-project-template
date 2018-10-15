@@ -25,7 +25,6 @@ services:
     command: "celery worker --app {{ project_name }} -l info -c 1 -B"
     environment:
       PRODUCTION: 0
-      DOCKERIZED: 1
       DJANGO_CONFIG_FILE_NAME: {{ project_name }}-docker.yml
     volumes:
       - "./docker/config/{{ project_name }}-docker.yml:/app/{{ project_name }}/config/{{ project_name }}-docker.yml"
